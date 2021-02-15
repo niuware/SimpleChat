@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Prepare simulator
-        run: sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes /Applications/Xcode_12.3.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 14.3.simruntime
+        run: |
+          sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes 
+          sudo ln -s /Applications/Xcode_12.3.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 14.3.simruntime
       - name: Run unit tests
-        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=14.3" 
+        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,OS=14.3,name=iPhone 11 Pro" 
