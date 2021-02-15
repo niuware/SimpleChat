@@ -1,0 +1,12 @@
+name: UnitTests
+
+on:
+  pull_request:
+    
+jobs:
+  UnitTests:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Github Action for UnitTests
+        run: xcodebuild clean test -project SimpleChat.xcodeproj -scheme SimpleChat -destination "platform=iOS Simulator,name=iPhone 12 Pro Max" 
