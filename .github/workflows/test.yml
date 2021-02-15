@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Switch to Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_12.3.app
+        run: sudo xcode-select -switch /Applications/Xcode_12.4.app
       - name: Run tests
-        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,name=iPhone 11 Pro Max,OS=latest" 
+        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,name=iPhone 11 Pro Max,OS=14.4" 
