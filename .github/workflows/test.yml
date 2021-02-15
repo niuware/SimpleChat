@@ -16,4 +16,4 @@ jobs:
           xcrun simctl create custom-test-device "iPhone 11 Pro Max" "com.apple.CoreSimulator.SimRuntime.iOS-14-3"
           xcrun simctl list devices 14.3
       - name: Run unit tests
-        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,OS=14.3,name=custom-test-device" 
+        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,OS=14.3,name=iPhone 11 Pro Max" 
