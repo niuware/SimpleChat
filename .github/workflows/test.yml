@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run unit tests
-        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,name=iPhone 11 Pro Max,OS=latest" 
+        run: xcodebuild clean test -project "SimpleChat.xcodeproj" -scheme "SimpleChat" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" 
