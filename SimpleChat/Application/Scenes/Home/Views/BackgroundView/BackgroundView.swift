@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol BackgroundViewDelegate : class {
+    func userDidInteractWithMessageInBackgroundView()
+}
+
 final class BackgroundView: UIView {
+    
+    weak var delegate: BackgroundViewDelegate!
+    
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
     
@@ -17,10 +24,13 @@ final class BackgroundView: UIView {
         }
     }
     
-    static func instantiate() -> BackgroundView {
+    static func instantiate(delegate: BackgroundViewDelegate) -> BackgroundView {
         guard let view = UINib(nibName: "BackgroundView", bundle: nil).instantiate(withOwner: self, options: nil).first as? BackgroundView else {
             fatalError("The view could not be instantiated.")
         }
+        
+        view.delegate = delegate
+        
         return view
     }
     
@@ -28,6 +38,15 @@ final class BackgroundView: UIView {
         super.awakeFromNib()
         setUpTitleLabel()
         setUpSubtitleLabel()
+        
+        isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self,
+                                                       action: #selector(didReceiveTap))
+        addGestureRecognizer(gestureRecognizer)
+    }
+    
+    @objc func didReceiveTap() {
+        delegate.userDidInteractWithMessageInBackgroundView()
     }
     
     private func setUpTitleLabel() {

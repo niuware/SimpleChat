@@ -18,10 +18,28 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setUpNavigationBar()
         setUpCollectionView()
         bind()
-        viewModel.requestContactsPermission()
+        
+        if let contactsPermissionGranted = viewModel.isContactsPermissionGranted.value {
+            // There is a value, which may be true or false.
+            // The user may have granted permission.
+            // The user may have denied permission.
+            if contactsPermissionGranted {
+                // Do nothing.
+            } else {
+                // Display the background view with custom strings.
+                setupBackgroundViewBeforeRequestingAccess()
+            }
+            
+        } else {
+            // There is no value.
+            // It's likely the user has not been asked for permission.
+            // Display the background view with custom strings.
+            setupBackgroundViewBeforeRequestingAccess()
+        }
     }
     
     private func setUpNavigationBar() {
@@ -41,25 +59,40 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
     }
     
     private func bind() {
+        // Binding means that whenever there is a change, this closure gets called on the main thread.
         viewModel.isContactsPermissionGranted.bind { [weak self] isGranted in
+            
             guard let granted = isGranted else {
                 return
             }
+            
             guard granted == true else {
                 self?.setUpBackgroundView()
                 return
             }
+            
             self?.viewModel.getContacts()
+            self?.dismissBackgroundView()
         }
         viewModel.isContactsCountUpdated.bind { [weak self] _ in
             self?.collectionView.reloadData()
         }
     }
     
+    private func setupBackgroundViewBeforeRequestingAccess() {
+        let view = BackgroundView.instantiate(delegate: viewModel)
+        view.viewModel = viewModel.getBackgroundViewModelBeforeUserAcceptsOrDenies()
+        collectionView.backgroundView = view
+    }
+    
     private func setUpBackgroundView() {
-        let view = BackgroundView.instantiate()
+        let view = BackgroundView.instantiate(delegate: viewModel)
         view.viewModel = viewModel.getBackgroundViewModel()
         collectionView.backgroundView = view
+    }
+    
+    private func dismissBackgroundView() {
+        collectionView.backgroundView = nil
     }
 }
 

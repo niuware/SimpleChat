@@ -25,6 +25,8 @@ final class HomeViewModel {
     init(contactsPermissionRequester: PermissionRequestable, addressBook: AddressBookProvider) {
         self.contactsPermissionRequester = contactsPermissionRequester
         self.addressBook = addressBook
+        
+        isContactsPermissionGranted.value = contactsPermissionRequester.isPermissionGranted
     }
     
     func requestContactsPermission() {
@@ -53,8 +55,21 @@ final class HomeViewModel {
         delegate?.didSelectContact(item.asContact())
     }
     
+    /// This view model is supposed to be shown before the user accepts/denies access to their contacts.
+    func getBackgroundViewModelBeforeUserAcceptsOrDenies() -> BackgroundViewViewModel {
+        return BackgroundViewViewModel(title: NSLocalizedString("Allow access to your Contacts", comment: ""),
+                                   subtitle: NSLocalizedString("Tap here to allow access to your contacts to continue chatting.", comment: ""))
+    }
+    
     func getBackgroundViewModel() -> BackgroundViewViewModel {
         return BackgroundViewViewModel(title: NSLocalizedString("home.contacts.accessNotAllowed.title", comment: ""),
                                    subtitle: NSLocalizedString("home.contacts.accessNotAllowed.description", comment: ""))
+    }
+}
+
+extension HomeViewModel: BackgroundViewDelegate {
+    
+    func userDidInteractWithMessageInBackgroundView() {
+        requestContactsPermission()
     }
 }
